@@ -2,7 +2,7 @@
   "name": "rez-work-01",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server1.js",
   "scripts": {
     "dev": "nodemon server1.js"
   },
