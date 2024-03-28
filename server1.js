@@ -5,6 +5,7 @@ const app = express()
 const cors = require('cors');
 //const dataRouter = require('./routes/data.js')
 const oldRouter = require('./routes/oldCollections.js')
+const PORT = process.env.PORT || 3000
 
 app.use(cors());
 app.use(express.json())
@@ -16,7 +17,7 @@ app.use('/old', oldRouter )
 
 ;( async ()=>{
     await connectDB()
-    app.listen(3000, ()=>{ console.log('server1 in effect...') }) 
+    app.listen(PORT, ()=>{ console.log('server1 in effect...') }) 
 })()
 
 
