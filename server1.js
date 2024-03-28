@@ -28,8 +28,8 @@ app.use('/old', oldRouter )
 
 //const express = require('express')
 
-const app = express()
-const PORT = process.env.PORT || 3000
+//const app = express()
+//const PORT = process.env.PORT || 3000
 
 const connectDB = async () => {
   try {
