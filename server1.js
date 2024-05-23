@@ -2,7 +2,7 @@
 const mongoose = require('mongoose')
 const express = require('express')
 const app = express()
-// const cors = require('cors');
+const cors = require('cors');
 const oldRouter = require('./routes/oldCollections.js')
 const PORT = process.env.PORT || 3000
 
@@ -29,7 +29,7 @@ const corsOptions = {
 // Enable CORS for all routes
 app.use(cors(corsOptions));
 
-//app.use(cors());
+
 */
 
 app.use(express.json())
@@ -48,7 +48,7 @@ app.use('/', (req, res, next) => {
     next();
   }
 }, oldRouter);
-
+app.use(cors());
 // app.use('/old', oldRouter )
 
 //Connect to the database before listening
