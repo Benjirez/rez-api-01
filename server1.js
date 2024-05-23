@@ -15,26 +15,29 @@ const connectDB = async () => {
   }
 };
 
+// CORS middleware
+const allowCors = fn => async (req, res) => {
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', 'https://rez-client-01.vercel.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  return await fn(req, res);
+};
+
 // Parse JSON request bodies
 app.use(express.json());
 
-// CORS middleware
-app.use('/old', (req, res, next) => {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', 'https://rez-client-01.vercel.app');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  // Handle preflight requests
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
-  } else {
-    next();
-  }
-});
-
 // Routes
-app.use('/old', oldRouter);
+app.use('/old', allowCors(oldRouter));
 
 // Connect to the database before listening
 connectDB().then(() => {
