@@ -37,7 +37,8 @@ const allowCors = fn => async (req, res) => {
 app.use(express.json());
 
 // Routes
-app.use('/old', allowCors(oldRouter));
+//app.use('/old', allowCors(oldRouter));
+app.use('/old', oldRouter);
 
 // Connect to the database before listening
 connectDB().then(() => {
