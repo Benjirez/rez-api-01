@@ -19,7 +19,17 @@ const connectDB = async () => {
 
 //Routes go here
 
-app.use(cors());
+// Configure CORS
+const corsOptions = {
+  origin: 'https://rez-client-01.vercel.app', // Replace with the client origin
+  optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+// Enable CORS for all routes
+app.use(cors(corsOptions));
+
+//app.use(cors());
+
 app.use(express.json())
 app.use('/old', oldRouter )
 
