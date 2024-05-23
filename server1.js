@@ -19,7 +19,7 @@ const connectDB = async () => {
 app.use(express.json());
 
 // CORS middleware
-app.use('/old', (req, res, next) => {
+app.use('/old/0', (req, res, next) => {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', 'https://rez-client-01.vercel.app');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
