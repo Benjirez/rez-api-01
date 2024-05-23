@@ -21,7 +21,7 @@ const connectDB = async () => {
 
 // Configure CORS
 const corsOptions = {
-  origin: 'https://rez-client-01.vercel.app', // Replace with the client origin
+  origin: 'https://rez-client-01.vercel.app/', // Replace with the client origin
   optionsSuccessStatus: 200, // Some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
