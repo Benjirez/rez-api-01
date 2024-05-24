@@ -1,4 +1,6 @@
 {
+  "version": 2, 
+  "rewrites": [{ "source": "/(.*)", "destination": "server1" }],
   "headers": [
     {
       "source": "/api/(.*)",
@@ -10,8 +12,7 @@
       ]
     },
     {
-      "source": "/old/(.*)",
-      "destination": "/server1",   
+      "source": "/old/(.*)", 
       "headers": [
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         { "key": "Access-Control-Allow-Origin", "value": "https://rez-client-01.vercel.app" },
