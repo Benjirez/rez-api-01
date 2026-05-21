@@ -18,8 +18,9 @@ router.post('/', async (req, res) => {
   if (!name || !name.trim()) {
     return res.status(400).json({ message: 'name is required' });
   }
+  const collectionName = name.trim().toLowerCase().replace(/\s+/g, '_');
   try {
-    const doc = await StoreName.create({ name: name.trim() });
+    const doc = await StoreName.create({ name: name.trim(), collectionName });
     res.status(201).json({ name: doc.name });
   } catch (err) {
     res.status(500).json({ message: err.message });
