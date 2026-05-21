@@ -4,8 +4,10 @@ const express = require('express')
 const app = express()
 const cors = require('cors');
 const oldRouter = require('./routes/oldCollections.js')
-const PORT = process.env.PORT || 3000
+// after the oldRouter require:
+const storeNamesRouter = require('./routes/storeNames.js')
 
+const PORT = process.env.PORT || 3000
 
 const connectDB = async () => {
   try {
@@ -22,6 +24,8 @@ const connectDB = async () => {
 app.use(cors());
 app.use(express.json())
 app.use('/old', oldRouter )
+// after app.use('/old', oldRouter):
+app.use('/store-names', storeNamesRouter)
 
 //Connect to the database before listening
 connectDB().then(() => {
