@@ -23,6 +23,9 @@ router.post('/', async (req, res) => {
     const doc = await StoreName.create({ name: name.trim(), collectionName });
     res.status(201).json({ name: doc.name });
   } catch (err) {
+    if (err.code === 11000) {
+      return res.status(409).json({ message: 'store already exists' });
+    }
     res.status(500).json({ message: err.message });
   }
 });
