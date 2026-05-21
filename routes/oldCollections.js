@@ -15,7 +15,8 @@ let collPick = 0;
 const getModel = async (pick) => {
   const stores = await StoreName.find().sort({ _id: 1 });
   if (stores[pick]) {
-    const collName = stores[pick].collectionName;
+    const collName = stores[pick].collectionName ||
+                     stores[pick].name.trim().toLowerCase().replace(/\s+/g, '_');
     return mongoose.models[collName] ||
            mongoose.model(collName, UserSchema, collName);
   }
