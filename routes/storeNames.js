@@ -45,9 +45,27 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
+router.get('/:id/count', async (req, res) => {
+  try {
+    const store = await StoreName.findById(req.params.id);
+    if (!store) return res.status(404).json({ message: 'store not found' });
+    const Model = mongoose.models[store.collectionName] ||
+                  mongoose.model(store.collectionName, UserSchema, store.collectionName);
+    const count = await Model.countDocuments();
+    res.json({ count, name: store.name });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.delete('/:id', async (req, res) => {
   try {
-    await StoreName.findByIdAndDelete(req.params.id);
+    const store = await StoreName.findByIdAndDelete(req.params.id);
+    if (store) {
+      try {
+        await mongoose.connection.dropCollection(store.collectionName);
+      } catch (e) { /* collection may not exist yet, ignore */ }
+    }
     const docs = await StoreName.find();
     res.json(docs.map(d => ({ _id: d._id, name: d.name })));
   } catch (err) {
