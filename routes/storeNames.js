@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
   col_i: String, col_j: String,
 });
 
+
 const DEFAULTS = ['1','2','3','4','5','6'].map(name => ({ _id: null, name }));
 
 router.get('/', async (req, res) => {
