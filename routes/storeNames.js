@@ -14,7 +14,7 @@ const DEFAULTS = ['1','2','3','4','5','6'].map(name => ({ _id: null, name }));
 
 router.get('/', async (req, res) => {
   try {
-    const docs = await StoreName.find();
+    const docs = await StoreName.find().sort({ _id: 1 });
     res.json(docs.length ? docs.map(d => ({ _id: d._id, name: d.name })) : DEFAULTS);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -66,7 +66,7 @@ router.delete('/:id', async (req, res) => {
         await mongoose.connection.dropCollection(store.collectionName);
       } catch (e) { /* collection may not exist yet, ignore */ }
     }
-    const docs = await StoreName.find();
+    const docs = await StoreName.find().sort({ _id: 1 });
     res.json(docs.map(d => ({ _id: d._id, name: d.name })));
   } catch (err) {
     res.status(500).json({ message: err.message });
