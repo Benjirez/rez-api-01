@@ -10,8 +10,6 @@ const UserSchema = new mongoose.Schema({
   col_i: String, col_j: String,
 });
 
-let collPick = 0;
-
 const getModel = async (pick) => {
   const stores = await StoreName.find().sort({ _id: 1 });
   if (stores[pick]) {
@@ -24,9 +22,8 @@ const getModel = async (pick) => {
 };
 
 router.get('/:pick', async (req, res) => {
-  collPick = req.params.pick;
   try {
-    const Model = await getModel(parseInt(collPick));
+    const Model = await getModel(parseInt(req.params.pick));
     const myData = await Model.find();
     res.json(myData);
   } catch (err) {
@@ -34,9 +31,9 @@ router.get('/:pick', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/:pick', async (req, res) => {
   try {
-    const Model = await getModel(parseInt(collPick));
+    const Model = await getModel(parseInt(req.params.pick));
     const data = new Model({
       col_a: req.body.col_a, col_b: req.body.col_b, col_c: req.body.col_c,
       col_d: req.body.col_d, col_e: req.body.col_e, col_f: req.body.col_f,
@@ -50,9 +47,9 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch('/:pick/:id', async (req, res) => {
   try {
-    const Model = await getModel(parseInt(collPick));
+    const Model = await getModel(parseInt(req.params.pick));
     const data = await Model.findById(req.params.id);
     if (req.body.title != null) { data.title = req.body.title; }
     await data.save();
@@ -62,9 +59,9 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:pick/:id', async (req, res) => {
   try {
-    const Model = await getModel(parseInt(collPick));
+    const Model = await getModel(parseInt(req.params.pick));
     await Model.findByIdAndDelete(req.params.id);
     const myData = await Model.find();
     res.json(myData);
