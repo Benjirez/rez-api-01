@@ -55,4 +55,32 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+router.post('/:id/duplicate', async (req, res) => {
+  try {
+    const source = await StoreName.findById(req.params.id);
+    if (!source) return res.status(404).json({ message: 'store not found' });
+
+    const newName = source.name + ' copy';
+    const newCollectionName = newName.toLowerCase().replace(/\s+/g, '_');
+
+    const newStore = await StoreName.create({ name: newName, collectionName: newCollectionName });
+
+    const SourceModel = mongoose.models[source.collectionName] ||
+                        mongoose.model(source.collectionName, UserSchema, source.collectionName);
+    const DestModel   = mongoose.models[newCollectionName] ||
+                        mongoose.model(newCollectionName, UserSchema, newCollectionName);
+
+    const docs = await SourceModel.find().lean();
+    if (docs.length) {
+      const copies = docs.map(({ _id, __v, ...rest }) => rest);
+      await DestModel.insertMany(copies);
+    }
+
+    res.status(201).json({ _id: newStore._id, name: newStore.name });
+  } catch (err) {
+    if (err.code === 11000) return res.status(409).json({ message: 'store already exists' });
+    res.status(500).json({ message: err.message });
+  }
+});
+
 module.exports = router;
