@@ -2,6 +2,14 @@ const express = require('express');
 const router = express.Router();
 const StoreName = require('../models/StoreName.js');
 
+const mongoose = require('mongoose');
+
+const UserSchema = new mongoose.Schema({
+  col_a: String, col_b: String, col_c: String, col_d: String,
+  col_e: String, col_f: String, col_g: String, col_h: String,
+  col_i: String, col_j: String,
+});
+
 const DEFAULTS = ['1','2','3','4','5','6'].map(name => ({ _id: null, name }));
 
 router.get('/', async (req, res) => {
