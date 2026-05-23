@@ -10,6 +10,8 @@ const UserSchema = new mongoose.Schema({
   col_i: String, col_j: String,
 });
 
+let collPick = 0;
+
 const getModel = async (pick) => {
   const stores = await StoreName.find().sort({ _id: 1 });
   if (stores[pick]) {
@@ -21,19 +23,9 @@ const getModel = async (pick) => {
   return oldCols[pick];
 };
 
-router.get('/:pick', async (req, res) => {
+const handlePost = async (req, res, pick) => {
   try {
-    const Model = await getModel(parseInt(req.params.pick));
-    const myData = await Model.find();
-    res.json(myData);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-
-router.post('/:pick', async (req, res) => {
-  try {
-    const Model = await getModel(parseInt(req.params.pick));
+    const Model = await getModel(parseInt(pick));
     const data = new Model({
       col_a: req.body.col_a, col_b: req.body.col_b, col_c: req.body.col_c,
       col_d: req.body.col_d, col_e: req.body.col_e, col_f: req.body.col_f,
@@ -45,7 +37,21 @@ router.post('/:pick', async (req, res) => {
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
+};
+
+router.get('/:pick', async (req, res) => {
+  collPick = req.params.pick;
+  try {
+    const Model = await getModel(parseInt(collPick));
+    const myData = await Model.find();
+    res.json(myData);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
+
+router.post('/:pick', (req, res) => handlePost(req, res, req.params.pick));
+router.post('/', (req, res) => handlePost(req, res, collPick));
 
 router.patch('/:pick/:id', async (req, res) => {
   try {
